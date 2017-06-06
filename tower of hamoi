@@ -1,0 +1,114 @@
+algo:--
+
+1. Calculate the total number of moves required i.e. "pow(2, n)
+   - 1" here n is number of disks.
+2. If number of disks (i.e. n) is even then interchange destination 
+   pole and auxiliary pole.
+3. for i = 1 to total number of moves:
+     if i%3 == 1:
+	legal movement of top disk between source pole and 
+        destination pole
+     if i%3 == 2:
+	legal movement top disk between source pole and 
+        auxiliary pole	
+     if i%3 == 0:
+        legal movement top disk between auxiliary pole 
+        and destination pole 
+        
+code:--
+
+int main()
+{
+    // Input: number of disks
+    unsigned num_of_disks = 3;
+ 
+    struct Stack *src, *dest, *aux;
+ 
+    // Create three stacks of size 'num_of_disks'
+    // to hold the disks
+    src = createStack(num_of_disks);
+    aux = createStack(num_of_disks);
+    dest = createStack(num_of_disks);
+ 
+    tohIterative(num_of_disks, src, aux, dest);
+    return 0;
+}
+
+
+void tohIterative(int num_of_disks, struct Stack
+             *src, struct Stack *aux,
+             struct Stack *dest)
+{
+    int i, total_num_of_moves;
+    char s = 'S', d = 'D', a = 'A';
+ 
+    //If number of disks is even, then interchange
+    //destination pole and auxiliary pole
+    if (num_of_disks % 2 == 0)
+    {
+        char temp = d;
+        d = a;
+        a  = temp;
+    }
+    total_num_of_moves = pow(2, num_of_disks) - 1;
+ 
+    //Larger disks will be pushed first
+    for (i = num_of_disks; i >= 1; i--)
+        push(src, i);
+ 
+    for (i = 1; i <= total_num_of_moves; i++)
+    {
+        if (i % 3 == 1)
+          moveDisksBetweenTwoPoles(src, dest, s, d);
+ 
+        else if (i % 3 == 2)
+          moveDisksBetweenTwoPoles(src, aux, s, a);
+ 
+        else if (i % 3 == 0)
+          moveDisksBetweenTwoPoles(aux, dest, a, d);
+    }
+}
+
+void moveDisksBetweenTwoPoles(struct Stack *src,
+            struct Stack *dest, char s, char d)
+{
+    int pole1TopDisk = pop(src);
+    int pole2TopDisk = pop(dest);
+ 
+    // When pole 1 is empty
+    if (pole1TopDisk == INT_MIN)
+    {
+        push(src, pole2TopDisk);
+        moveDisk(d, s, pole2TopDisk);
+    }
+ 
+    // When pole2 pole is empty
+    else if (pole2TopDisk == INT_MIN)
+    {
+        push(dest, pole1TopDisk);
+        moveDisk(s, d, pole1TopDisk);
+    }
+ 
+    // When top disk of pole1 > top disk of pole2
+    else if (pole1TopDisk > pole2TopDisk)
+    {
+        push(src, pole1TopDisk);
+        push(src, pole2TopDisk);
+        moveDisk(d, s, pole2TopDisk);
+    }
+ 
+    // When top disk of pole1 < top disk of pole2
+    else
+    {
+        push(dest, pole2TopDisk);
+        push(dest, pole1TopDisk);
+        moveDisk(s, d, pole1TopDisk);
+    }
+}
+
+//Function to show the movement of disks
+void moveDisk(char fromPeg, char toPeg, int disk)
+{
+    printf("Move the disk %d from \'%c\' to \'%c\'\n",
+           disk, fromPeg, toPeg);
+}
