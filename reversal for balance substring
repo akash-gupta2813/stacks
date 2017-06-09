@@ -1,0 +1,49 @@
+
+
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+ {
+	//code
+      int t;
+      cin>>t;
+        while(t--){
+          string s;
+          cin>>s;
+          int len=s.length();
+          int n=0;
+
+          if(len%2){
+             cout<<-1<<endl;
+             continue;
+          }
+
+          vector<char> v;
+
+         for(int i=0;i<len;i++){
+             if(s[i]=='{' || v.empty()){
+                v.push_back(s[i]);
+             }
+
+             else{
+                 if(v.back()=='{')
+                 v.pop_back();
+
+                 else{
+                    v.push_back(s[i]);
+                 }
+             }
+         }
+
+         int ans=v.size();
+
+         while(!v.empty() && v.back()=='{'){
+           n++;
+           v.pop_back();
+         }
+
+        cout<<ans/2+n%2<<endl;
+    }
+
+	return 0;
+}
