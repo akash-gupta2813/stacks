@@ -1,0 +1,89 @@
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int precedence(char ch)
+{
+    switch (ch)
+    {
+    case '+':
+    case '-':
+        return 1;
+
+    case '*':
+    case '/':
+        return 2;
+
+    case '^':
+        return 3;
+    }
+    return -1;
+}
+
+int isOperand(char ch)
+{
+    return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
+}
+
+int main()
+ {
+	//code
+       int t;
+      cin>>t;
+        while(t--){
+           string s;
+           cin>>s;
+           int len=s.length();
+
+           vector<char> v;
+           char res[len];
+           int k=0,flag=0,i=0;
+
+           while(i<len){
+                if(isOperand(s[i]))
+                res[k++]=s[i];
+
+                else if(s[i]=='(')
+                v.push_back(s[i]);
+
+                else if(s[i]==')'){
+                    while(!v.empty() && v.back()!='('){
+                        res[k++]=v.back();
+                        v.pop_back();
+                    }
+                    if(!v.empty() && v.back()!='('){
+                        flag=1;
+                        break;
+                    }
+                    else
+                    v.pop_back();
+                }
+                else{
+                    while(!v.empty() && precedence(s[i])<=precedence(v.back())){
+                        res[k++]=v.back();
+                        v.pop_back();
+                    }
+                    v.push_back(s[i]);
+                }
+            i++;
+           }
+
+           if(flag==1){
+               cout<<"invalid"<<endl;
+               continue;
+           }
+
+           while(!v.empty()){
+               res[k++]=v.back();
+               v.pop_back();
+           }
+
+           res[k]='\0';
+
+           for(int i=0;i<=k;i++)
+           cout<<res[i];
+
+           cout<<endl;
+    }
+	return 0;
+}
