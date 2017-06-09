@@ -1,0 +1,47 @@
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+ {
+	//code
+       int t;
+       cin>>t;
+    while(t--){
+          string s;
+          cin>>s;
+         int n=s.length();
+
+        vector<int> v;
+        int i=0,res;
+
+        while(i<n){
+            if(s[i]>=48 && s[i]<=57)
+            {v.push_back((int)(s[i]-'0'));
+
+            //cout<<(int)(s[i]-'0')<<endl;
+            }
+            else{
+                int top1=v.back();
+                v.pop_back();
+                int top2=v.back();
+                v.pop_back();
+
+                if(s[i]=='+')
+                     res=(top1+top2);
+                else if(s[i]=='-')
+                     res=(top2-top1);
+                else if(s[i]=='*')
+                     res=(top1*top2);
+                else if(s[i]=='/')
+                     res=top2/top1;
+
+                v.push_back(res);
+            }
+            i++;
+        }
+         cout<<v.back()<<endl;
+    }
+	return 0;
+}
